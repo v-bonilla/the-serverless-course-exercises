@@ -8,6 +8,7 @@ custom:
   defaultRegion: eu-west-1
   defaultStage: dev${env:SLSUSER, ""}
   tableName: ${self:provider.stage}-gettogethers
+  joinGetTogetherSnsTopicName: ${self:provider.stage}-joingettogethers
 
 provider:
   name: aws
@@ -30,6 +31,11 @@ functions:
       - http:
           path: api/gettogethers
           method: get
+  notifyOrganiser:
+    handler: src/functions/notifyOrganiser.handler
+    events:
+      - sns: ${self:custom.joinGetTogetherSnsTopicName}
+
     iamRoleStatements:
       - Effect: Allow
         Action: dynamodb:scan
