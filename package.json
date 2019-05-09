@@ -1,0 +1,23 @@
+{
+  "name": "gettogether",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:integration": "TEST_MODE=handler jest ./tests/*",
+    "test:acceptance": "TEST_MODE=http jest ./tests/*"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "serverless": "^1.41.1",
+    "serverless-iam-roles-per-function": "^2.0.0",
+    "serverless-pseudo-parameters": "^2.4.0",
+    "superagent": "^5.0.5",
+    "superagent-promise": "^1.1.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.452.0"
+  }
+}
