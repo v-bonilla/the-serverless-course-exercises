@@ -1,6 +1,6 @@
 const AWS = require("aws-sdk");
 
-const tableName = 'gettogethers';
+const tableName = process.argv.slice(2)[0];
 
 AWS.config.region = "eu-west-1";
 const dynamodb = new AWS.DynamoDB.DocumentClient();
