@@ -26,6 +26,7 @@ functions:
       - http:
           path: api/helloWorld/{name}
           method: get
+
   getGetTogethers:
     handler: src/functions/getGetTogethers.handler
     environment:
@@ -41,10 +42,17 @@ functions:
       - Effect: Allow
         Action: ssm:GetParameters*
         Resource: arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/gettogethers/${self:provider.stage}/*
+
   notifyOrganiser:
     handler: src/functions/notifyOrganiser.handler
     events:
       - sns: ${self:custom.joinGetTogetherSnsTopicName}
+
+  notifyOrganiserDLQ:
+    handler: src/functions/notifyOrganiserDLQ.handler
+    events:
+      - sns: ${self:custom.notifyOrganiserDLQSnsTopic}
+
   joinGetTogether:
     handler: src/functions/joinGetTogether.handler
     events:
