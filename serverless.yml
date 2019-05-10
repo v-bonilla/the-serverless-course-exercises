@@ -1,18 +1,8 @@
-service: gettogether
+service: gettogether2
 
 plugins:
   - serverless-pseudo-parameters
   - serverless-iam-roles-per-function
-
-provider:
-  name: aws
-  runtime: nodejs8.10
-  region: ${opt:region, self:custom.defaultRegion}
-  stage: ${opt:stage, self:custom.defaultStage}
-
-package:
-  exclude: 
-    - cloudwatch-logs-to-logzio/**
 
 custom:
   defaultRegion: eu-west-1
@@ -21,12 +11,26 @@ custom:
   joinGetTogetherSnsTopicName: ${self:provider.stage}-joingettogethers
   joinGetTogetherSnsTopic: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.joinGetTogetherSnsTopicName}
 
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ${opt:region, self:custom.defaultRegion}
+  stage: ${opt:stage, self:custom.defaultStage}
+
 functions:
-  getGetTogethers:
-    handler: src/functions/getGetTogethers.handler
+  helloWorld:
+    handler: src/functions/helloWorld.handler
     events:
       - http:
-          path: api/getTogethers
+          path: api/helloWorld/{name}
+          method: get
+  getGetTogethers:
+    handler: src/functions/getGetTogethers.handler
+    environment:
+      getTogethersTableName: ${self:custom.getTogethersTableName}
+    events:
+      - http:
+          path: api/gettogethers
           method: get
     iamRoleStatements:
       - Effect: Allow
@@ -35,14 +39,10 @@ functions:
       - Effect: Allow
         Action: ssm:GetParameters*
         Resource: arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/gettogethers/${self:provider.stage}/*
-    environment:
-      getTogethersTableName: /gettogethers/${self:provider.stage}/secureTableName
-
   notifyOrganiser:
     handler: src/functions/notifyOrganiser.handler
     events:
       - sns: ${self:custom.joinGetTogetherSnsTopicName}
-
   joinGetTogether:
     handler: src/functions/joinGetTogether.handler
     events:
@@ -55,6 +55,7 @@ functions:
       - Effect: Allow
         Action: sns:Publish
         Resource: ${self:custom.joinGetTogetherSnsTopic}
+
 
 resources:
   Resources:
