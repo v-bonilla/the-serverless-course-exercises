@@ -4,7 +4,7 @@ const { ssm } = require("middy/middlewares")
 const log = require("../lib/log")
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const tableName = ${process.env.getTogethersTableName};
+const tableName = process.env.getTogethersTableName;
 
 const handler = async (event, context) => {
     const count = 8;
