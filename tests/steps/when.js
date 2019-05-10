@@ -1,32 +1,10 @@
-const log = require("../../src/lib/log")
 const http = require("superagent-promise")(require("superagent"), Promise);
 
-module.exports.we_invoke_helloWorld = (name) => {
-    const event = { pathParameters: { name: name } };
-
-    const mode = process.env.TEST_MODE;
-
-    return mode === "http"
-        ? viaHttp(`helloWorld/${name}`, "GET")
-        : viaHandler("helloWorld", event);
-}
-
-module.exports.we_invoke_get_getTogethers = () => {
-    const mode = process.env.TEST_MODE;
-
-    return mode === "http"
-        ? viaHttp(`gettogethers`, "GET")
-        : viaHandler("getGetTogethers");
-}
-
-async function viaHandler(name, event) {
-    const handler = require(`../../src/functions/${name}`);
-    log.debug(name)
+async function viaHandler(functionPath, event) {
+    const handler = require(`../../src/functions/${functionPath}`);
     const response = await handler.handler(event);
-    log.debug(response)
     response.body = JSON.parse(response.body);
-    log.debug(response)
-    return response
+    return response;
 }
 
 async function viaHttp(functionPath) {
@@ -35,7 +13,7 @@ async function viaHttp(functionPath) {
 
     const url = `${apiRoot}/${functionPath}`;
 
-    log.info(url);
+    console.log(url);
 
     try {
         const httpReq = http(method, url);
@@ -54,3 +32,11 @@ async function viaHttp(functionPath) {
         throw err;
     }
 }
+
+module.exports.we_invoke_get_gettogethers = () => {
+    const mode = process.env.TEST_MODE;
+  
+    return mode === "http"
+      ? viaHttp(`getTogethers`, "GET")
+      : viaHandler("getGetTogethers");
+  }

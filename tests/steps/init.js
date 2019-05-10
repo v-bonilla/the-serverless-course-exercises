@@ -1,4 +1,4 @@
 module.exports.init = () => {
     process.env.AWS_REGION = "eu-west-1";
-    process.env.TABLE_NAME = `${process.env.TEST_STAGE}-gettogethers`;
+    process.env.getTogethersTableName = `${process.env.TEST_STAGE}-gettogethers`;
 };
