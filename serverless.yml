@@ -7,7 +7,7 @@ plugins:
 custom:
   defaultRegion: eu-west-1
   defaultStage: dev${env:SLSUSER, ""}
-  tableName: ${self:provider.stage}-gettogethers
+  getTogethersTableName: ${self:provider.stage}-gettogethers
   joinGetTogetherSnsTopicName: ${self:provider.stage}-joingettogethers
   joinGetTogetherSnsTopic: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.joinGetTogetherSnsTopicName}
 
@@ -27,7 +27,7 @@ functions:
   getGetTogethers:
     handler: src/functions/getGetTogethers.handler
     environment:
-      TABLE_NAME: ${self:custom.tableName}
+      getTogethersTableName: ${self:custom.getTogethersTableName}
     events:
       - http:
           path: api/gettogethers
@@ -35,7 +35,7 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action: dynamodb:scan
-        Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.tableName}
+        Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.getTogethersTableName}
   notifyOrganiser:
     handler: src/functions/notifyOrganiser.handler
     events:
@@ -59,7 +59,7 @@ resources:
     GetTogethersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tableName}
+        TableName: ${self:custom.getTogethersTableName}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N
