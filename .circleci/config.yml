@@ -30,9 +30,9 @@ jobs:
 #      - run:
 #          name: Run integration tests
 #          command: TEST_STAGE=sit npm run test:integration
-      - run:
-          name: Run acceptance tests
-          command: npm run test:acceptance
+#      - run:
+#          name: Run acceptance tests
+#          command: npm run test:acceptance
       - run:
           name: Deploy application
           command: npm run deploy:prod
