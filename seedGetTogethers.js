@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+const log = require("./src/lib/log")
 
 const tableName = process.argv.slice(2)[0];
 
@@ -72,5 +73,5 @@ const req = {
 dynamodb
     .batchWrite(req)
     .promise()
-    .then(() => console.log("all done"))
-    .catch(e => console.log(e));
+    .then(() => log.info("all done"))
+    .catch(e => log.info(e));

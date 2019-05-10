@@ -1,16 +1,16 @@
 const AWS = require("aws-sdk");
-const middy = require('middy')
-const { ssm } = require('middy/middlewares')
+const middy = require("middy")
+const { ssm } = require("middy/middlewares")
+const log = require("../lib/log")
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const tableName = `${process.env.TABLE_NAME}`;
+const tableName = ${process.env.getTogethersTableName};
 
-const handler = async () => {
+const handler = async (event, context) => {
     const count = 8;
-    console.log(tableName)
 
     const req = {
-        TableName: tableName,
+        TableName: context.tableName,
         Limit: count
     };
 

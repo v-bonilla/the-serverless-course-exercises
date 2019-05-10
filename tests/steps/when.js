@@ -1,3 +1,4 @@
+const log = require("../../src/lib/log")
 const http = require("superagent-promise")(require("superagent"), Promise);
 
 module.exports.we_invoke_helloWorld = (name) => {
@@ -20,9 +21,11 @@ module.exports.we_invoke_get_getTogethers = () => {
 
 async function viaHandler(name, event) {
     const handler = require(`../../src/functions/${name}`);
+    log.debug(name)
     const response = await handler.handler(event);
+    log.debug(response)
     response.body = JSON.parse(response.body);
-    console.log(response)
+    log.debug(response)
     return response
 }
 
@@ -32,7 +35,7 @@ async function viaHttp(functionPath) {
 
     const url = `${apiRoot}/${functionPath}`;
 
-    console.log(url);
+    log.info(url);
 
     try {
         const httpReq = http(method, url);
